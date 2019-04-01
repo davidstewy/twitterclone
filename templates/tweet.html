@@ -1,0 +1,12 @@
+<body>
+  <h3>Tweet Details</h3>
+  <ul>
+    {% for item in data.tweets %}
+    <li>
+      <p>{{ item }}</p>
+      <p> {{ item.timecreated }}</p>
+      <a href="/{{ data.user }}/">Tweeted By: {{ data.user }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</body>

@@ -8,22 +8,48 @@ from notification.models import Notification
 from twitteruser.forms import LoginForm, SignupForm
 
 
+def user_view(request, author_username):
+    html = 'user.html'
+
+    TwitterUser_obj = TwitterUser.objects.filter(user__username=author_username)[0]
+
+    Tweet_obj = Tweet.objects.filter(author=TwitterUser_obj)
+
+    data_obj = {
+        'data': {
+            'user': TwitterUser_obj,
+            'tweets': Tweet_obj
+        }
+    }
+
+    return render(request, html, data_obj)
+
+@login_required()
 def homepage(request):
-    return render(request, 'homepage.html')
+    Tweet_obj = Tweet.objects.all()
+
+    data_obj = {
+        'data': {
+            'tweets': Tweet_obj,
+        }
+    }
+    return render(request, 'homepage.html', data_obj)
 
 
 def login_view(request):
     html = 'login.html'
-    form = LoginForm()
+    form = LoginForm(None or request.POST)
 
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             user = authenticate(username=data['username'], password=data['password'])
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(request.GET.get('next', '/'))
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(request.GET.get('next', '/'))
+    else:
+        form = LoginForm()
     return render(request, html, {'form': form})
 
 

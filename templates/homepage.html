@@ -7,7 +7,17 @@
     <title>Homepage</title>
 </head>
 <body>
-    Whats up CeCe
-    {{ test }}
+    <ul>
+        {% for item in data.tweets %}
+        <li>
+          <p>{{ item }} tweeted by: <a href="/{{ item.author }}">{{item.author}}</a></p>
+          <p> {{ item.timecreated }}</p>
+          <a href="/{{ item.author }}/{{ item.id }}">Go To Tweet</a>
+        </li>
+        {% endfor %}
+        <p></p>
+        <p></p>
+        <li><a href="/logout">Log out</a></li>
+      </ul>
 </body>
 </html>
